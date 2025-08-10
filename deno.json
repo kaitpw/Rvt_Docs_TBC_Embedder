@@ -1,9 +1,17 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch main.ts",
+    "db:init": "deno run -A src/dbified-index-page/init.ts",
+    "db:test": "deno run -A src/dbified-index-page/main.ts",
+    "db:generate": "deno run -A npm:drizzle-kit@^0.31.4 generate",
+    "db:push": "deno run -A npm:drizzle-kit@^0.31.4 push",
+    "db:migrate": "deno run -A npm:drizzle-kit@^0.31.4 migrate"
   },
   "imports": {
+    "@electric-sql/pglite": "npm:@electric-sql/pglite@^0.3.7",
     "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
+    "drizzle-orm": "npm:drizzle-orm@^0.44.4",
+    "drizzle-kit": "npm:drizzle-kit@^0.31.4",
     "openai": "npm:openai@^5.12.2"
   }
 }

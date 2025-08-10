@@ -32,12 +32,15 @@ async function uploadFile(
     return null;
   }
 
+  // Remove all "&nbsp;" characters from the file content
+  const cleanedContent = fileContent.replace(/&nbsp;/g, " ");
+
   const isMarkdown = sourceFile.endsWith(".md");
   const mimeType = isMarkdown ? "text/markdown" : "text/html";
   const fileName = info.finalFile; // Always use the final filename (with .html extension)
 
   try {
-    const blob = new Blob([fileContent], { type: mimeType });
+    const blob = new Blob([cleanedContent], { type: mimeType });
     const file = new File([blob], fileName, { type: mimeType });
 
     const uploaded = await client.files.create({
