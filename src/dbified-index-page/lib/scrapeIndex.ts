@@ -1,6 +1,4 @@
 import { parse } from "parse5";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 
 interface TOCEntry {
   number: string;
@@ -20,8 +18,9 @@ interface Parse5Node {
   nextSibling?: Parse5Node;
 }
 
-export function scrapeIndex(htmlFilePath: string): TOCEntry[] {
-  const document = parse(readFileSync(htmlFilePath, "utf-8"));
+export async function scrapeIndex(dir: string): Promise<TOCEntry[]> {
+  const htmlContent = await Deno.readTextFile(`${dir}/index.html`);
+  const document = parse(htmlContent);
   console.log("Parsing HTML document for TOC entries...");
 
   // Create a mapping of URLs to topics by scanning topic sections
@@ -47,13 +46,27 @@ function createUrlToTopicsMap(document: Parse5Node): Record<string, string[]> {
       "";
     if (!topicName) continue;
 
-    // Find ul elements that are children of the header's parent or siblings
+    // Find the ul element that follows this header by looking at the parent's children
     const parent = findParentElement(header, document);
     if (parent) {
-      const childUls = findElementsByTagName(parent, "ul");
+      // Find the ul that comes after this header
+      let foundUl: Parse5Node | null = null;
+      let foundHeader = false;
 
-      for (const ul of childUls) {
-        const links = findElementsByTagName(ul, "a");
+      for (const child of parent.childNodes || []) {
+        if (child === header) {
+          foundHeader = true;
+          continue;
+        }
+
+        if (foundHeader && child.nodeName === "ul") {
+          foundUl = child;
+          break;
+        }
+      }
+
+      if (foundUl) {
+        const links = findElementsByTagName(foundUl, "a");
         for (const link of links) {
           const href = link.attrs?.find((attr) => attr.name === "href")?.value;
           if (href?.startsWith("http://thebuildingcoder.typepad.com/")) {
@@ -135,10 +148,13 @@ function parseTOCRow(
     const href = link.attrs?.find((attr) => attr.name === "href")?.value;
     if (!href) continue;
 
-    if (href.startsWith("http://thebuildingcoder.typepad.com/")) {
+    if (
+      href.startsWith("http://thebuildingcoder.typepad.com/") ||
+      href.startsWith("https://thebuildingcoder.typepad.com/")
+    ) {
       urlExternal = href;
       title = extractTextContent(link) || "";
-    } else if (href.endsWith(".htm")) {
+    } else if (href.endsWith(".htm") || href.endsWith(".html")) {
       urlInternal = href;
     }
   }
@@ -180,18 +196,9 @@ function extractTextContent(element: Parse5Node): string {
   return "";
 }
 
-export function main() {
+export async function main() {
   try {
-    const indexPath = join(
-      Deno.cwd(),
-      "..",
-      "..",
-      "..",
-      "tbc",
-      "a",
-      "index.html",
-    );
-    const entries = scrapeIndex(indexPath);
+    const entries = await scrapeIndex("./tbc/a");
 
     console.log(`Successfully scraped ${entries.length} entries`);
 
@@ -223,7 +230,7 @@ export function main() {
       console.log("\nSample entries with topics:");
       for (const entry of entriesWithTopics.slice(0, 3)) {
         console.log(
-          `  ${entry.number}: ${entry.title} - Topic: ${entry.topic}`,
+          `  ${entry.number}: ${entry.title} - Topic: ${entry.topic}`, // this shows that every topic is being added
         );
       }
     }
@@ -234,4 +241,4 @@ export function main() {
   }
 }
 
-if (import.meta.main) main();
+if (import.meta.main) main().catch(console.error);

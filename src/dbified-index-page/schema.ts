@@ -1,10 +1,10 @@
-import { integer, pgSchema, text, varchar } from "drizzle-orm/pg-core";
+import { pgSchema, text, varchar } from "drizzle-orm/pg-core";
 
 const TABLE_NAME = "tbc_pages";
 
 export const schema = pgSchema("tbc");
 
-export const tbc_index = schema.table(TABLE_NAME, {
+export const tbc_pages = schema.table(TABLE_NAME, {
   number: varchar({ length: 4 }).primaryKey(),
   date: varchar({ length: 10 }).notNull(),
   title: varchar({ length: 255 }).notNull(),
