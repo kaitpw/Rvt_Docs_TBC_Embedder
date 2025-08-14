@@ -5,6 +5,7 @@
     "jsr:@std/dotenv@~0.225.5": "0.225.5",
     "npm:@electric-sql/pglite@~0.3.7": "0.3.7",
     "npm:@types/node@*": "22.15.15",
+    "npm:drizzle-kit@*": "0.31.4_esbuild@0.25.8",
     "npm:drizzle-kit@0.31.4": "0.31.4_esbuild@0.25.8",
     "npm:drizzle-kit@~0.31.4": "0.31.4_esbuild@0.25.8",
     "npm:drizzle-orm@~0.44.4": "0.44.4_@electric-sql+pglite@0.3.7",

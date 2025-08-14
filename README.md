@@ -33,13 +33,21 @@ General Steps:
 > **NOTE**: Each run of this `deno task make` will make a new vector store. It
 > will not add duplicated files to the file store though
 
+Clone this repo with
+`git clone --recurse-submodules --shallow-submodules https://github.com/kaitpw/Rvt_Docs_TBC_Embedder.git`.
+If you have already cloned this repo without the submodules-related flags, the
+TBC submodule will not be cloned. In this case use
+`git submodule update --init --recursive --depth 1 --progress` to clone. As
+noted, this takes a while.
+
 To get your API key, go to the OpenAI console and make one. You'll have to make
 an account and add billing info if you have not already. Then use your prefered
 way of setting environment variables. Standard for JS/TS projects is a `.env`
 file that you make at the root of this project (that path would be
-`Rvt_Docs_Tbc_Embedder/.env`). There are a large variety of other ways to set
-env vars depending on your preferences and OS. I have not personally tested
-these alternatives but in theory they should work.
+`Rvt_Docs_Tbc_Embedder/.env`). The vars name is `OPENAI_API_KEY`. There are a
+large variety of other ways to set env vars depending on your preferences and
+OS. I have not personally tested these alternatives but in theory they should
+work.
 
 To make your own vector store, run `deno task make` in your terminal. As you may
 expect, this requires the deno runtime being installed on your computer. Install
