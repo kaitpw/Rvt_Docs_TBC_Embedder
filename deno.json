@@ -1,11 +1,13 @@
 {
   "tasks": {
     "dev": "deno run --watch main.ts",
+    "make": "deno task db:generate && deno task db:init && deno task db:seed && deno task files:upload",
     "db:generate": "deno run -A npm:drizzle-kit generate",
     "db:init": "deno run -A src/dbified-index-page/init.ts",
+    "db:seed": "deno run -A src/dbified-index-page/main.ts",
     "db:studio": "npx drizzle-kit studio",
     "db:clear": "deno run -A src/dbified-index-page/delete-all.ts",
-    "db:seed": "deno run -A src/dbified-index-page/main.ts"
+    "files:upload": "deno run -A src/openai-tbc-pages/scripts/upload.ts"
   },
   "imports": {
     "@electric-sql/pglite": "npm:@electric-sql/pglite@^0.3.7",
