@@ -10,11 +10,11 @@ C# code examples, miscellaneous pdfs, and more.
 Unfortunately AI is not free, though it is getting cheaper. Thus you must use
 your own API keys. This project makes it easy to do this for yourself.
 
-# Usage
+## Usage
 
 General Steps:
 
-1. Clone this repo
+1. `clone` this repo (IMPORTANT: don't clone normally)
 2. Get OpenAI API key
 3. run `deno task make`
 4. Use vector store with Rvt_Docs_MCP
@@ -33,12 +33,19 @@ General Steps:
 > **NOTE**: Each run of this `deno task make` will make a new vector store. It
 > will not add duplicated files to the file store though
 
-Clone this repo with
-`git clone --recurse-submodules --shallow-submodules https://github.com/kaitpw/Rvt_Docs_TBC_Embedder.git`.
+**Clone this repo with the below command**
+
+```terminal
+git clone --recurse-submodules --shallow-submodules https://github.com/kaitpw/Rvt_Docs_TBC_Embedder.git
+```
+
 If you have already cloned this repo without the submodules-related flags, the
-TBC submodule will not be cloned. In this case use
-`git submodule update --init --recursive --depth 1 --progress` to clone. As
-noted, this takes a while.
+TBC submodule will not be cloned. In this case use the below command to clone,
+as noted this takes a while
+
+```
+git submodule update --init --recursive --depth 1 --progress
+```
 
 To get your API key, go to the OpenAI console and make one. You'll have to make
 an account and add billing info if you have not already. Then use your prefered
@@ -60,39 +67,39 @@ Storage > Vector Stores. The store's name will include the timestamp for the
 when it was created (which should be a few minutes before the completion of
 `deno task make`). Follow instructions in Rvt_Docs_MCP on how to use the ID.
 
-## Available Commands
+### Available Commands
 
-### `deno task db:generate`
+#### `deno task db:generate`
 
 Generates Drizzle schema for PGlite.
 
-### `deno task db:init`
+#### `deno task db:init`
 
 Initializes a PGLite database at your project root.
 
-### `deno task db:seed`
+#### `deno task db:seed`
 
 Seeds the PGlite database with data from the TBC blog git submodule. This takes
 a moment
 
-### `deno task files:upload`
+#### `deno task files:upload`
 
 Uploads files to OpenAI file storage, then adds those files to a new vector
 store (makes a new vector store everytime this is run). Logs a summary including
 the vector store ID. This command takes a few minutes.
 
-### `deno task make`
+#### `deno task make`
 
 Runs all 4 of the above commands in sequence.
 
-### `deno task db:studio`
+#### `deno task db:studio`
 
 If for fun you want to look at the database contents, run this. If you only want
 to see the database, but don't want to make a vector store, run
 `deno task db:generate`, `deno task db:init`, and `deno task db:seed` in
 sequence. then run this.
 
-### Delete all OpenAI files
+#### Delete all OpenAI files
 
 You probably shouldn't do this but you can delete all of you OpenAI File Storage
 files with `deno run -A src/openai-tbc-pages/scripts/delete-all-files.ts`. This
